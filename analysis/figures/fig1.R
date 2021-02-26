@@ -49,27 +49,56 @@ hrs <- map_dfr(ud_levels, ud_to_sf) %>%
   mutate(ud_level = factor(ud_level, levels = c("95%", "75%", "50%", "25%")))
 
 
-# Land shapefiles
+# Land shapefiles and bathymetry
 fig1_extent <- extent(hrs) * 1.2
 land_sf <- ne_download(scale = "large",
                        type = "land",
                        category = "physical",
                        returnclass = "sf") %>%
   st_transform(utm_30n)
+islands_sf <- ne_download(scale = "large",
+                          type = "minor_islands",
+                          category = "physical",
+                          returnclass = "sf") %>%
+  st_transform(utm_30n)
+bathy_extent <- (fig1_extent * 3) %>%
+  raster(crs = utm_30n) %>%
+  projectExtent("+proj=longlat +datum=WGS84") %>%
+  extent()
+bathy_levels <- c(-50, -150, -250)
+bathy <- marmap::getNOAA.bathy(lon1 = latlon_extent[1],
+                               lon2 = latlon_extent[2],
+                               lat1 = latlon_extent[3],
+                               lat2 = latlon_extent[4],
+                               resolution = 1) %>%
+  marmap::as.raster() %>%
+  rasterToContour(levels = bathy_levels) %>%
+  st_as_sf() %>%
+  mutate(depth = factor(level,
+                        levels = bathy_levels,
+                        labels = paste(bathy_levels, "m")))
 
-# Fig 1a
+# Fig 1
 ggplot() +
   geom_sf(data = land_sf, fill = "#989898", color = NA) +
-  geom_sf(aes(fill = ud_level), data = hrs, color = NA) +
+  geom_sf(data = islands_sf, fill = "#989898", color = NA) +
+  geom_sf(aes(color = depth), data = bathy) +
+  geom_sf(aes(fill = ud_level), data = hrs, color = NA, alpha = 0.8) +
   scale_x_continuous(breaks = c(-5, 0, 5)) +
   scale_y_continuous(breaks = seq(52, 60, by = 2)) +
   scale_fill_manual(values = c(`25%` = "#DB602B",
                                `50%` = "#E9C14C",
                                `75%` = "#FFFF5A",
                                `95%` = "#D5D5D5")) +
+  scale_color_manual(values = c(`-50 m` = "#DBDBDB",
+                                `-150 m` = "#C4C4C4",
+                                `-250 m` = "#787878")) +
   labs(fill = "UD") +
   guides(fill = guide_legend(reverse = TRUE)) +
   coord_sf(xlim = fig1_extent[1:2],
            ylim = fig1_extent[3:4]) +
   facet_grid(cols = vars(age)) +
-  theme_minimal()
+  theme_minimal() +
+  theme(strip.background = element_blank(),
+        strip.text = element_blank())
+ggsave("analysis/figures/fig1.pdf", height = 4, width = 6.5, units = "in")
