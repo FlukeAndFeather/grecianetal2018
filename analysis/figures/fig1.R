@@ -29,14 +29,14 @@ all_tracks_df %>%
 # run kernelUD() once (instead of per-age class) so results end up on same grid
 
 # UTM 30N crs
-utm_30n <- CRS("+init=EPSG:32630")
+utm_30n <- CRS(SRS_string = "EPSG:32630")
 
 uds <- all_tracks_df %>%
   {SpatialPointsDataFrame(coords = cbind(.$UTM_x, .$UTM_y),
                           data = data.frame(id = .$age),
                           proj4string = utm_30n)} %>%
   # Methods specify 1 km grid, 10 km smoothing parameter
-  kernelUD(grid = 1e3, h = 10e3)
+  kernelUD(grid = 1e3, h = 10e3, same4all = TRUE)
 
 ud_levels <- c(25, 50, 75, 95)
 ud_to_sf <- function(percent) {
@@ -66,10 +66,10 @@ bathy_extent <- (fig1_extent * 3) %>%
   projectExtent("+proj=longlat +datum=WGS84") %>%
   extent()
 bathy_levels <- c(-50, -150, -250)
-bathy <- marmap::getNOAA.bathy(lon1 = latlon_extent[1],
-                               lon2 = latlon_extent[2],
-                               lat1 = latlon_extent[3],
-                               lat2 = latlon_extent[4],
+bathy <- marmap::getNOAA.bathy(lon1 = bathy_extent[1],
+                               lon2 = bathy_extent[2],
+                               lat1 = bathy_extent[3],
+                               lat2 = bathy_extent[4],
                                resolution = 1) %>%
   marmap::as.raster() %>%
   rasterToContour(levels = bathy_levels) %>%

@@ -15,9 +15,20 @@ LazyData: true
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.1
 Imports: 
+    adehabitatHR,
     bookdown,
+    dplyr,
+    ggplot2,
     here,
+    marmap,
+    purrr,
+    raster,
     readr,
-    rnaturalearth
+    rnaturalearth,
+    sf,
+    sp,
+    targets
 Suggests: devtools,
     git2r
+Depends: 
+    R (>= 2.10)
