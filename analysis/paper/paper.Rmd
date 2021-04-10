@@ -1,17 +1,11 @@
 ---
-title: "Title Goes Here"
+title: "Replication of Grecian et al. (2018) \"Understanding the ontogeny of foraging behaviour: insights from combining marine predator bio-logging with satellite-derived oceanography in hidden Markov models\""
 author:
-  - Myfirstname Mylastname:
-      email: fl@oneplace.edu
-      institute: [UofO]
-      correspondence: true
-  - Yourfirstname Yourlastname:
-      email: fl@another.edu
-      institute: [UofA]
-      correspondence: false
+  - Max Czapanskiy:
+      email: maxczap@stanford.edu
+      institute: [SU]
 institute:
-  - UofO: University of One Place
-  - UofA: University of Another Place
+  - SU: Stanford University
 date: "`r format(Sys.time(), '%d %B, %Y')`"
 output: 
     bookdown::word_document2:

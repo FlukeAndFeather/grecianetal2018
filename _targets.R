@@ -24,5 +24,9 @@ list(
   tar_target(obs_ba, observed_ba(noga_uds)),
   # Note: this step runs really long; choose n_cores according to your system
   tar_target(null_ba, sim_null_ba(n_cores = 4)),
-  tar_target(fig2, make_fig2(obs_ba, null_ba), format = "file")
+  tar_target(fig2, make_fig2(obs_ba, null_ba), format = "file"),
+
+  # Make table 1
+  tar_target(trips, trip_summaries()),
+  tar_target(table1, make_table1(trips))
 )

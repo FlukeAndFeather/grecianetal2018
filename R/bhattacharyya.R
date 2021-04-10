@@ -30,7 +30,7 @@ observed_ba <- function(uds) {
 #' @export
 sim_null_ba <- function(n_cores = 1) {
   set.seed(1331)
-  N <- 4
+  N <- 50
   replicates <- parallel::mclapply(1:N, function(x) {
     shuffled <- noga_tracks %>%
       distinct(id, age) %>%

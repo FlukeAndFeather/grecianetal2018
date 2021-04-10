@@ -20,6 +20,7 @@ Imports:
     dplyr,
     ggplot2,
     here,
+    lme4,
     marmap,
     parallel,
     purrr,
@@ -28,7 +29,8 @@ Imports:
     rnaturalearth,
     sf,
     sp,
-    targets
+    targets,
+    tidyr
 Suggests: devtools,
     git2r
 Depends: 
