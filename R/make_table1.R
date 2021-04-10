@@ -28,6 +28,24 @@ trip_area <- function(x, y) {
                            plotit = FALSE) %>%
     unlist()
 }
+trip_farthest <- function(x, y, coord = c("x", "y")) {
+  coord = match.arg(coord)
+  bass_xy <- sf::st_as_sf(data.frame(lon = -2.60, lat = 57.0),
+                          coords = c("lon", "lat")) %>%
+    sf::st_set_crs(4326) %>%
+    st_transform(utm_30n) %>%
+    st_coordinates() %>%
+    as.vector()
+  dist <- sqrt((x - bass_xy[1])^2 + (y - bass_xy[2])^2)
+  farthest <- which.max(dist)
+  if (coord == "x") {
+    x[farthest]
+  } else if (coord == "y") {
+    y[farthest]
+  } else {
+    stop("Error in trip_farthest(): coord should be \"x\" or \"y\"")
+  }
+}
 
 #' Summarize trips
 #'
@@ -39,9 +57,11 @@ trip_summaries <- function() {
   noga_tracks %>%
     group_by(age, id, trip) %>%
     summarize(duration_h = trip_hours(datetime_utc),
-              trip_rad = trip_angle(UTM_x, UTM_y),
               length_km = trip_length(lon, lat),
+              trip_rad = trip_angle(UTM_x, UTM_y),
               range_km = trip_range(lon, lat),
+              far_x = trip_farthest(UTM_x, UTM_y, "x"),
+              far_y = trip_farthest(UTM_x, UTM_y, "y"),
               area_km2 = trip_area(UTM_x, UTM_y),
               .groups = "drop")
 }
