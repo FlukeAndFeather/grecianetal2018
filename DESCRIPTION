@@ -21,6 +21,7 @@ Imports:
     ggplot2,
     here,
     marmap,
+    parallel,
     purrr,
     raster,
     readr,

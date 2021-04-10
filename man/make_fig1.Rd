@@ -17,7 +17,7 @@ make_fig1(home_ranges, land, islands, bathy)
 \item{bathy}{\code{sf} object with bathymetric contours (see \code{get_bathy})}
 }
 \value{
-\code{ggplot} object of figure 1
+File path to figure 1
 }
 \description{
 Figure 1 is a map comparing the home ranges of adult and immature Northern

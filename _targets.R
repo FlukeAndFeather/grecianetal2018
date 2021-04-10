@@ -18,5 +18,11 @@ list(
                               extent_mult = 5,
                               bathy_levels = c(-50, -150, -250))),
   # Make figure 1 and save to file
-  tar_target(fig1, make_fig1(noga_hrs, land, islands, bathy), format = "file")
+  tar_target(fig1, make_fig1(noga_hrs, land, islands, bathy), format = "file"),
+
+  # Observed and null Bhattacharyya's affinity for 50% and 95% UD home ranges
+  tar_target(obs_ba, observed_ba(noga_uds)),
+  # Note: this step runs really long; choose n_cores according to your system
+  tar_target(null_ba, sim_null_ba(n_cores = 4)),
+  tar_target(fig2, make_fig2(obs_ba, null_ba), format = "file")
 )

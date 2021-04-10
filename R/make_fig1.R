@@ -9,7 +9,7 @@
 #'   `get_naturalearth`)
 #' @param bathy `sf` object with bathymetric contours (see `get_bathy`)
 #'
-#' @return `ggplot` object of figure 1
+#' @return File path to figure 1
 #' @export
 make_fig1 <- function(home_ranges, land, islands, bathy) {
   fig1_extent <- extent(home_ranges) * 1.2
